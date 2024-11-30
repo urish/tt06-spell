@@ -24,8 +24,7 @@ class SpellController(ttboard.cocotb.dut.DUT):
         self.i_load = self.new_bit_attribute(tt.ui_in, 2)
         self.i_dump = self.new_bit_attribute(tt.ui_in, 3)
         self.i_shift_in = self.new_bit_attribute(tt.ui_in, 4)
-        self.i_reg_sel_0 = self.new_bit_attribute(tt.ui_in, 5)
-        self.i_reg_sel_1 = self.new_bit_attribute(tt.ui_in, 6)
+        self.i_reg_sel = self.new_slice_attribute(tt.ui_in, 6, 5)
 
         self.o_cpu_sleep = self.new_bit_attribute(tt.uo_out, 0)
         self.o_cpu_stop = self.new_bit_attribute(tt.uo_out, 1)
@@ -37,8 +36,7 @@ class SpellController(ttboard.cocotb.dut.DUT):
         self.i_load.value = 0
         self.i_dump.value = 0
         self.i_shift_in.value = 0
-        self.i_reg_sel_0.value = 0
-        self.i_reg_sel_1.value = 0
+        self.i_reg_sel.value = 0
 
     def ensure_cpu_stopped(self):
         while int(self.o_cpu_stop) == 0:
@@ -50,22 +48,18 @@ class SpellController(ttboard.cocotb.dut.DUT):
     def sleeping(self):
         return int(self.o_cpu_stop) == 1
 
-    def set_reg_sel(self, value: int):
-        self.i_reg_sel_0.value = value & 1
-        self.i_reg_sel_1.value = (value >> 1) & 1
-
     def write_reg(self, reg: int, value: int):
         for i in range(8):
             self.i_shift_in.value = (value >> (7 - i)) & 1
             self.tt.clock_project_once()
-        self.set_reg_sel(reg)
+        self.i_reg_sel.value = reg
         self.i_load.value = 1
         self.tt.clock_project_once()
         self.i_load.value = 0
         self.tt.clock_project_once()
 
     def read_reg(self, reg: int):
-        self.set_reg_sel(reg)
+        self.i_reg_sel.value = reg
         self.i_dump.value = 1
         self.tt.clock_project_once()
         self.i_dump.value = 0
