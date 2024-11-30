@@ -1,0 +1,33 @@
+; Spell "SPELL" on a 7-segment display connected to the uio port (e.g. Simon Says Pmod)
+; Author: Uri Shaked
+; License: Public Domain
+; To compile into bytecode, use https://github.com/urish/hlspl.
+
+.ORIGIN 0
+
+CONST DDRB 0x37
+CONST PORTB 0x38
+
+; Configure the first 7 uo_out pins as outputs
+  PUSH 127
+  PUSH DDRB
+  WRITE
+:Start
+  PUSH 0        ; null terminator
+  PUSH 129      ; ' '+1
+  PUSH 57       ; L+1
+  PUSH 57       ; L+1
+  PUSH 244      ; E+1 (actually 122, hence we SHR next)
+  SHR
+  PUSH 116      ; P+1
+  PUSH 109      ; S
+:Wait
+  PUSH PORTB
+  WRITE 
+  DELAY 250
+  PUSH 0
+  PUSH PORTB
+  WRITE
+  DELAY 25
+  LOOP @Wait
+  JMP @Start
