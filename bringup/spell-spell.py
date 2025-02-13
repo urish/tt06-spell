@@ -19,17 +19,17 @@ class SpellController(ttboard.cocotb.dut.DUT):
     def __init__(self, tt: DemoBoard):
         super().__init__('Spell')
         self.tt = tt
-        self.i_run = self.new_bit_attribute(tt.ui_in, 0)
-        self.i_step = self.new_bit_attribute(tt.ui_in, 1)
-        self.i_load = self.new_bit_attribute(tt.ui_in, 2)
-        self.i_dump = self.new_bit_attribute(tt.ui_in, 3)
-        self.i_shift_in = self.new_bit_attribute(tt.ui_in, 4)
-        self.i_reg_sel = self.new_slice_attribute(tt.ui_in, 6, 5)
+        self.i_run = self.new_bit_attribute('i_run', tt.ui_in, 0)
+        self.i_step = self.new_bit_attribute('i_step', tt.ui_in, 1)
+        self.i_load = self.new_bit_attribute('i_load', tt.ui_in, 2)
+        self.i_dump = self.new_bit_attribute('i_dump', tt.ui_in, 3)
+        self.i_shift_in = self.new_bit_attribute('i_shift_in', tt.ui_in, 4)
+        self.i_reg_sel = self.new_slice_attribute('i_reg_sel', tt.ui_in, 6, 5)
 
-        self.o_cpu_sleep = self.new_bit_attribute(tt.uo_out, 0)
-        self.o_cpu_stop = self.new_bit_attribute(tt.uo_out, 1)
-        self.o_wait_delay = self.new_bit_attribute(tt.uo_out, 2)
-        self.o_shift_out = self.new_bit_attribute(tt.uo_out, 3)
+        self.o_cpu_sleep = self.new_bit_attribute('o_cpu_sleep', tt.uo_out, 0)
+        self.o_cpu_stop = self.new_bit_attribute('o_cpu_stop', tt.uo_out, 1)
+        self.o_wait_delay = self.new_bit_attribute('o_wait_delay', tt.uo_out, 2)
+        self.o_shift_out = self.new_bit_attribute('o_shift_out', tt.uo_out, 3)
 
         self.i_run.value = 0
         self.i_step.value = 0
